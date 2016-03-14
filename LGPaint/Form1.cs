@@ -78,18 +78,18 @@ namespace LGPaint
         //MouseDown event for the panel, turns paint to true to start painting
         private void canvas_MouseDown(object sender, MouseEventArgs e)
         {
+            //Make sure it's the left mouse button
+            if (e.Button != MouseButtons.Left)
+            {
+                return;
+            }
+
             paint = true;
         }
 
         //MouseMove event for the panel
         private void canvas_MouseMove(object sender, MouseEventArgs e)
         {
-            //Make sure it's the left mouse button
-            if(e.Button != MouseButtons.Left)
-            {
-                return;
-            }
-
             //Paint if the mouse is down
             if(paint)
             {
@@ -117,7 +117,6 @@ namespace LGPaint
             {
                 this.color = colorDialog1.Color;
             }
-
         }
 
         //Change the brush's width
@@ -142,7 +141,6 @@ namespace LGPaint
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 //Scale the image upon load to fit the canvas
-                //ToDo: Make a scaling canvas
                 this.canvas.BackgroundImage = new Bitmap(Image.FromFile(openFileDialog1.FileName), new Size(canvas.Width, canvas.Height));
             }
         }
@@ -181,6 +179,19 @@ namespace LGPaint
         private void canvas_Paint(object sender, PaintEventArgs e)
         {
             e.Graphics.DrawImage(bmp, Point.Empty);
+        }
+
+        //Change the canvas color
+        private void changeCanvasColorButton_Click(object sender, EventArgs e)
+        {
+            //Open the ColorDialog
+            DialogResult result = colorDialog1.ShowDialog();
+
+            //Check to see if the user clicked OK
+            if (result == DialogResult.OK)
+            {
+                canvas.BackColor = colorDialog1.Color;
+            }
         }
     }
 }

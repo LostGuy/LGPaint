@@ -42,6 +42,7 @@
             this.saveButton = new System.Windows.Forms.Button();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.canvas = new System.Windows.Forms.PictureBox();
+            this.changeCanvasColorButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.widthTrackBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.heightTrackBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.canvas)).BeginInit();
@@ -76,7 +77,7 @@
             this.changeColorButton.Name = "changeColorButton";
             this.changeColorButton.Size = new System.Drawing.Size(148, 35);
             this.changeColorButton.TabIndex = 3;
-            this.changeColorButton.Text = "Change Color";
+            this.changeColorButton.Text = "Change Brush Color";
             this.changeColorButton.UseVisualStyleBackColor = true;
             this.changeColorButton.Click += new System.EventHandler(this.changeColorButton_Click);
             // 
@@ -167,6 +168,9 @@
             // 
             // canvas
             // 
+            this.canvas.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.canvas.Location = new System.Drawing.Point(13, 13);
             this.canvas.Name = "canvas";
             this.canvas.Size = new System.Drawing.Size(803, 571);
@@ -177,11 +181,23 @@
             this.canvas.MouseMove += new System.Windows.Forms.MouseEventHandler(this.canvas_MouseMove);
             this.canvas.MouseUp += new System.Windows.Forms.MouseEventHandler(this.canvas_MouseUp);
             // 
+            // changeCanvasColorButton
+            // 
+            this.changeCanvasColorButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.changeCanvasColorButton.Location = new System.Drawing.Point(857, 250);
+            this.changeCanvasColorButton.Name = "changeCanvasColorButton";
+            this.changeCanvasColorButton.Size = new System.Drawing.Size(148, 35);
+            this.changeCanvasColorButton.TabIndex = 14;
+            this.changeCanvasColorButton.Text = "Change Canvas Color";
+            this.changeCanvasColorButton.UseVisualStyleBackColor = true;
+            this.changeCanvasColorButton.Click += new System.EventHandler(this.changeCanvasColorButton_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1039, 597);
+            this.Controls.Add(this.changeCanvasColorButton);
             this.Controls.Add(this.canvas);
             this.Controls.Add(this.saveButton);
             this.Controls.Add(this.openButton);
@@ -219,6 +235,7 @@
         private System.Windows.Forms.Button saveButton;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
         private System.Windows.Forms.PictureBox canvas;
+        private System.Windows.Forms.Button changeCanvasColorButton;
     }
 }
 
