@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Drawing.Imaging;
 using System.Windows.Forms;
 
 namespace LGPaint
@@ -14,6 +15,7 @@ namespace LGPaint
     {
         //Fields
         bool paint = false;
+        Bitmap bmp;
 
         //Used to paint
         SolidBrush brush;
@@ -36,6 +38,14 @@ namespace LGPaint
             //Set the track bars to the default width and height
             widthTrackBar.Value = width;
             heightTrackBar.Value = height;
+
+            //Set the window size
+            this.Width = Screen.FromControl(this).Bounds.Width;
+            this.Height = Screen.FromControl(this).Bounds.Height;
+            this.WindowState = FormWindowState.Maximized;
+
+            //Set the image
+            bmp = new Bitmap(canvas.ClientSize.Width, canvas.ClientSize.Height);
         }
 
         //Close the program
@@ -51,6 +61,12 @@ namespace LGPaint
 
             //Clear the canvas
             graphics.Clear(canvas.BackColor);
+
+            //Clear set the background image to nothing
+            canvas.BackgroundImage = null;
+
+            //New image
+            bmp = new Bitmap(canvas.ClientSize.Width, canvas.ClientSize.Height);
         }
 
         //MouseUp event for the panel, turns paint to false to quit painting
@@ -68,18 +84,26 @@ namespace LGPaint
         //MouseMove event for the panel
         private void canvas_MouseMove(object sender, MouseEventArgs e)
         {
+            //Make sure it's the left mouse button
+            if(e.Button != MouseButtons.Left)
+            {
+                return;
+            }
+
             //Paint if the mouse is down
             if(paint)
             {
-                //Pick a color
-                brush = new SolidBrush(color);
+                using (Graphics gr = Graphics.FromImage(bmp))
+                {
+                    //Set the color
+                    brush = new SolidBrush(color);
 
-                Graphics g = canvas.CreateGraphics();
-
-                //Paint on the mouse location
-                g.FillEllipse(brush, e.X, e.Y, width, height);
-                g.Dispose();
+                    //Paint on the mouse location
+                    gr.FillEllipse(brush, e.X, e.Y, width, height);
+                }
             }
+
+            canvas.Invalidate();
         }
 
         //Opens up a ColorDialog for the user to change colors
@@ -121,6 +145,42 @@ namespace LGPaint
                 //ToDo: Make a scaling canvas
                 this.canvas.BackgroundImage = new Bitmap(Image.FromFile(openFileDialog1.FileName), new Size(canvas.Width, canvas.Height));
             }
+        }
+       
+        //Save the image
+        private void saveButton_Click(object sender, EventArgs e)
+        {
+            //Set the filters
+            saveFileDialog1.Filter = "Image files (*.bmp, *.jpeg, *.png) | *.bmp; *.jpeg; *.png";
+
+            //Open the save file dialog
+            DialogResult dr = saveFileDialog1.ShowDialog();
+
+            //Save the file as the correct type
+            if (saveFileDialog1.FileName.Substring(saveFileDialog1.FileName.Length - 3).ToLower() == "bmp")
+            {
+                Bitmap bitmap = new Bitmap(canvas.Width, canvas.Height);
+                canvas.DrawToBitmap(bitmap, new Rectangle(0, 0, canvas.Width, canvas.Height));
+                bitmap.Save(saveFileDialog1.FileName, ImageFormat.Bmp);
+            }
+            else if (saveFileDialog1.FileName.Substring(saveFileDialog1.FileName.Length - 3).ToLower() == "jpg")
+            {
+                Bitmap bitmap = new Bitmap(canvas.Width, canvas.Height);
+                canvas.DrawToBitmap(bitmap, new Rectangle(0, 0, canvas.Width, canvas.Height));
+                bitmap.Save(saveFileDialog1.FileName, ImageFormat.Jpeg);
+            }
+            else if (saveFileDialog1.FileName.Substring(saveFileDialog1.FileName.Length - 3).ToLower() == "png")
+            {
+                Bitmap bitmap = new Bitmap(canvas.Width, canvas.Height);
+                canvas.DrawToBitmap(bitmap, canvas.Bounds);
+                bitmap.Save(saveFileDialog1.FileName, ImageFormat.Png);
+            }
+        }
+
+        //Paint the image
+        private void canvas_Paint(object sender, PaintEventArgs e)
+        {
+            e.Graphics.DrawImage(bmp, Point.Empty);
         }
     }
 }
